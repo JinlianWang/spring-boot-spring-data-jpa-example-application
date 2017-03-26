@@ -1,12 +1,14 @@
 package net.javabeat.spring.data.service;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import net.javabeat.spring.data.domain.Book;
+import net.javabeat.spring.data.domain.BookCategory;
 
 @Service
 @Transactional
@@ -20,6 +22,9 @@ public class BookServiceImpl implements BookService {
 	@Autowired
 	private BookNamedQueryRepositoryExample bookNamedQueryRepository;	
 
+	@Autowired
+	private BookCategoryRepository bookCategoryRepository;
+	
 	public List<Book> findAll() {
 		return bookRepository.findAll();
 	}
@@ -66,5 +71,32 @@ public class BookServiceImpl implements BookService {
 		if(list.size() > 0) {
 			bookRepository.delete(list.get(0));
 		}
+	}
+	
+	public Set<Book> findByCategory(String name) {
+		List<BookCategory> catList = this.bookCategoryRepository.findByName(name);
+		if(catList.size()>0){
+			return catList.get(0).getBooks();
+		}
+		return null;
+	}
+	
+	public Book saveBook(int id, String name, String author,
+			long price, String category){
+		BookCategory cat = null;
+		List<BookCategory> catList = this.bookCategoryRepository.findByName(category);
+		if(catList.size()>0){
+			cat = catList.get(0);
+		} else {
+			cat = new BookCategory(category);
+		}
+		Book book = new Book();
+		book.setId(id);
+		book.setName(name);
+		book.setAuthor(author);
+		book.setPrice(price);
+		book.setBookCategory(cat);
+		this.saveBook(book);
+		return book;
 	}
 }

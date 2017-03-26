@@ -1,6 +1,7 @@
 package net.javabeat.spring.data.web;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import net.javabeat.spring.data.domain.Book;
+import net.javabeat.spring.data.domain.BookCategory;
 import net.javabeat.spring.data.service.BookService;
 
 @RestController
@@ -16,16 +18,10 @@ public class BooksController {
 	@Autowired
 	private BookService bookService;
 
-	@RequestMapping(value = "/add/{id}/{name}/{author}/{price}")
+	@RequestMapping(value = "/add/{id}/{name}/{author}/{price}/{category}")
 	public Book addBook(@PathVariable int id, @PathVariable String name, @PathVariable String author,
-			@PathVariable long price) {
-		Book book = new Book();
-		book.setId(id);
-		book.setName(name);
-		book.setAuthor(author);
-		book.setPrice(price);
-		bookService.saveBook(book);
-		return book;
+			@PathVariable long price, @PathVariable String category) {
+		return bookService.saveBook(id, name, author, price, category);
 	}
 	@RequestMapping(value = "/delete/{id}")
 	public void deleteBook(@PathVariable int id) {
@@ -76,5 +72,10 @@ public class BooksController {
 	@RequestMapping(value="/delete/name/{name}")
 	public void deleteByName(@PathVariable String name){
 		this.bookService.deleteByName(name);
+	}
+	@RequestMapping(value = "/searchCat/{name}")
+	public Set<Book> getBookByNameAndAuthor(@PathVariable String name) {
+		Set<Book> books = bookService.findByCategory(name);
+		return books;
 	}
 }
