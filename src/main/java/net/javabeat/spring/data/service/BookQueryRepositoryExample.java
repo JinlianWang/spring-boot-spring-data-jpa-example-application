@@ -10,11 +10,11 @@ import net.javabeat.spring.data.domain.Book;
 
 public interface BookQueryRepositoryExample extends Repository<Book, Long> {
 	
-	@Query(value = "select * from #{#entityName} b where b.name=?1", nativeQuery = true)
+	@Query(value = "select * from #{#entityName} b where b.name=?1 order by b.name", nativeQuery = true)
 	List<Book> findByName(String name);
 
-	@Query(value = "select name,author,price from Book b where b.price>?1 and b.price<?2")
-	List<Book> findByPriceRange(long price1, long price2);
+	@Query(value = "select * from #{#entityName} b where b.price>?1 and b.price<?2 order by b.price asc limit ?3", nativeQuery = true)
+	List<Book> cool(long price1, long price2, int limit);
 
 	@Query(value = "select name,author,price from Book b where b.name like %:name%")
 	List<Book> findByNameMatch(@Param("name") String name);

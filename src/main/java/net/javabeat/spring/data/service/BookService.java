@@ -16,7 +16,8 @@ public interface BookService {
 	public List<Book> findByName(String name);
 	public List<Book> findByNameAndAuthor(String name, String author);
 	public List<Book> findByPrice(long price);
-	List<Book> findByPriceRange(long price1, long price2);
+	List<Book> findByPriceRange(long price1, long price2, int limit);
 	List<Book> findByNameMatch(String name);
 	List<Book> findByNamedParam(String name, String author, long price);
+	public void deleteByName(String name);
 }

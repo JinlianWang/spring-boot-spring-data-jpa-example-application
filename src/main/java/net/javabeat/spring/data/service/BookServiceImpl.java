@@ -36,8 +36,8 @@ public class BookServiceImpl implements BookService {
 		return bookQueryRepository.findByNamedParam(name, author, price);
 	}
 
-	public List<Book> findByPriceRange(long price1, long price2) {
-		return bookQueryRepository.findByPriceRange(price1, price2);
+	public List<Book> findByPriceRange(long price1, long price2, int limit) {
+		return bookQueryRepository.cool(price1, price2, limit);
 	}
 
 	public List<Book> findByPrice(long price) {
@@ -59,5 +59,12 @@ public class BookServiceImpl implements BookService {
 
 	public void delete(long id) {
 		bookRepository.delete(id);
+	}
+	
+	public void deleteByName(String name) {
+		List<Book> list = this.findByName(name);
+		if(list.size() > 0) {
+			bookRepository.delete(list.get(0));
+		}
 	}
 }

@@ -63,14 +63,18 @@ public class BooksController {
 		List<Book> books = bookService.findByPrice(price);
 		return books;
 	}
-	@RequestMapping(value = "/search/price/{price1}/{price2}")
-	public List<Book> getBookByPriceRange(@PathVariable int price1, @PathVariable int price2) {
-		List<Book> books = bookService.findByPriceRange(price1, price2);
+	@RequestMapping(value = "/search/price/{price1}/{price2}/{limit}")
+	public List<Book> getBookByPriceRange(@PathVariable int price1, @PathVariable int price2, @PathVariable int limit) {
+		List<Book> books = bookService.findByPriceRange(price1, price2, limit);
 		return books;
 	}
 	@RequestMapping(value = "/search/{name}/{author}")
 	public List<Book> getBookByNameAndAuthor(@PathVariable String name, @PathVariable String author) {
 		List<Book> books = bookService.findByNameAndAuthor(name, author);
 		return books;
+	}
+	@RequestMapping(value="/delete/name/{name}")
+	public void deleteByName(@PathVariable String name){
+		this.bookService.deleteByName(name);
 	}
 }
